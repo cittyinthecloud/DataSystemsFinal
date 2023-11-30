@@ -23,3 +23,8 @@ plt.show()
 plt.title("Length in bytes of UDP flows")
 plt.hist(df[df["protocol"]=="udp"]["bytes_total"],bins=30, range=(0,2048))
 plt.show()
+
+plt.title("Percentage of Each Type of Protocol")
+plt.pie(df["protocol"].value_counts(), labels = df["protocol"].value_counts().index,
+        autopct='%1.1f%%')
+plt.show()
