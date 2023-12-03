@@ -46,3 +46,6 @@ grpbyDest = df.groupby("dest_ip")
 print(grpbyDest.agg({"bytes_out":"sum"})
       .sort_values(by= "bytes_out",ascending=False).index[0])
 
+#Dest_ip that spent the most time
+print(grpbyDest.agg({"time_taken":"sum"})
+      .sort_values(by= "time_taken",ascending=False).index[0]) #Most time = most bytes
