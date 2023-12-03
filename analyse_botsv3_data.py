@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#Caleb Gindelberger, Ricky Yoder
 import pandas as pd
 import matplotlib.pyplot as plt
 
