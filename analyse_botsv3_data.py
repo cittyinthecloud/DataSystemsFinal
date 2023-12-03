@@ -13,7 +13,8 @@ df["bytes_total"] = df["bytes_in"] + df["bytes_out"]
 
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 df.set_index("timestamp" ,inplace=True)
-    
+
+#Visualizations    
 plt.title("Length in bytes of ICMP flows")
 plt.hist(df[df["protocol"]=="icmp"]["bytes_total"],bins=30)
 plt.show()
@@ -35,3 +36,13 @@ plt.title("Total Bytes Over Time")
 plt.plot(df.index.sort_values(),df["bytes_total"].sort_index().cumsum())
 plt.xticks(rotation=45)
 plt.show()
+
+#Queries
+#Most Active dest_ip (Total requests)
+print(df["dest_ip"].value_counts().sort_values(ascending=False).index[0])
+
+#Dest_ip with most bytes sent to it 
+grpbyDest = df.groupby("dest_ip")
+print(grpbyDest.agg({"bytes_out":"sum"})
+      .sort_values(by= "bytes_out",ascending=False).index[0])
+
