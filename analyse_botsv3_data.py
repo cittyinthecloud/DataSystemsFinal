@@ -62,6 +62,10 @@ print(grpbyProt.agg({"bytes_total":"sum"})
 print(grpbyProt.agg({"app": pd.Series.nunique})
       .sort_values(by = "app", ascending=False).index[0:3]) #tcp surprising given how many more udp usages there are
 
+#amount of unhashed flows
+print(grpbyProt.agg({"src_content_hash": lambda x: sum(x.isna())})
+      .sort_values(by = "src_content_hash", ascending=False).index[0:3]) #tcp had the highest amount of unhashed flows
+
 #Top 3 src_ips with the most unique dest_ips
 print(df.groupby("src_ip").agg({"dest_ip": pd.Series.nunique})
       .sort_values(by = "dest_ip", ascending=False).index[0:3])
