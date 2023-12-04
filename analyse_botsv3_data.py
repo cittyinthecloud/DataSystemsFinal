@@ -38,8 +38,8 @@ plt.xticks(rotation=45)
 plt.show()
 
 #Queries
-#Most Active dest_ip (Total flows)
-print(df["dest_ip"].value_counts().sort_values(ascending=False).index[0])
+#top 3 Most Active dest_ip (Total flows)
+print(df["dest_ip"].value_counts().sort_values(ascending=False).index[0:3])
 
 #Top 3 Dest_ips with most bytes sent to it 
 grpbyDest = df.groupby("dest_ip")
@@ -52,6 +52,13 @@ print(grpbyDest.agg({"time_taken":"sum"})
 
 #Top 3 apps that were used the most
 print(df["app"].value_counts().sort_values(ascending=False).index[0:3])
+
+#Which protocol was used to move the most bytes_total
+grpbyProt = df.groupby("protocol")
+print(grpbyProt.agg({"bytes_total":"sum"})
+      .sort_values(by= "bytes_total",ascending=False).index[0]) #tcp, even though udp was used the most
+
+
 
 
 
