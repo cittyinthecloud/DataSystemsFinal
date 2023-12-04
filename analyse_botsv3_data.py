@@ -77,7 +77,7 @@ print(grpbyProt.agg({"src_content_hash": lambda x: sum(x.isna())})
 
 print(df["protocol"].value_counts())
 
-#Top 3 src_ips with the most unique dest_ips
+#Top 3 src_ips with the most unique dest_ips *written with*
 print(df.groupby("src_ip").agg({"dest_ip": pd.Series.nunique})
       .sort_values(by = "dest_ip", ascending=False).index[0:3])
 
