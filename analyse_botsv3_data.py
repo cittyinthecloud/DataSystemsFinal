@@ -58,14 +58,11 @@ grpbyProt = df.groupby("protocol")
 print(grpbyProt.agg({"bytes_total":"sum"})
       .sort_values(by= "bytes_total",ascending=False).index[0]) #tcp, even though udp was used the most which makes sense bc tcp is used for file transfer
 
+#which protocol had the most unique apps
+print(grpbyProt.agg({"app": pd.Series.nunique})
+      .sort_values(by = "app", ascending=False).index[0:3]) #tcp surprising given how many more udp usages there are
+
 #Top 3 src_ips with the most unique dest_ips
 print(df.groupby("src_ip").agg({"dest_ip": pd.Series.nunique})
       .sort_values(by = "dest_ip", ascending=False).index[0:3])
-
-
-
-
-
-
-
 
