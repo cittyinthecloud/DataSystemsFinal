@@ -43,15 +43,15 @@ plt.xticks(rotation=45)
 plt.show()
 
 #Queries
-#top 3 Most Active dest_ip (Total flows)
-print(df["dest_ip"].value_counts().sort_values(ascending=False).index[0:3])
+#top 3 Most Active dest_ip (Total flows) *Written With*
+print(df["dest_ip"].value_counts().sort_values(ascending=False).index[0:3]) 
 
-#Top 3 Dest_ips with most bytes sent to it 
+#Top 3 Dest_ips with most bytes sent to it  *Written with*
 grpbyDest = df.groupby("dest_ip")
 print(grpbyDest.agg({"bytes_out":"sum"})
       .sort_values(by= "bytes_out",ascending=False).index[0:3])
 
-#top 3 Dest_ips that spent the most time
+#top 3 Dest_ips that spent the most time *Written With*
 print(grpbyDest.agg({"time_taken":"sum"})
       .sort_values(by= "time_taken",ascending=False).index[0:3]) #Most time = most bytes but not all 3
 
