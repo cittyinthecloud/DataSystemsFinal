@@ -58,18 +58,24 @@ print(grpbyDest.agg({"time_taken":"sum"})
 #Top 3 apps that were used the most
 print(df["app"].value_counts().sort_values(ascending=False).index[0:3])
 
-#Which protocol was used to move the most bytes_total
+#Which protocol was used to move the most bytes_total *Written with*
 grpbyProt = df.groupby("protocol")
 print(grpbyProt.agg({"bytes_total":"sum"})
       .sort_values(by= "bytes_total",ascending=False).index[0]) #tcp, even though udp was used the most which makes sense bc tcp is used for file transfer
 
-#which protocol had the most unique apps
+#top 3 protocols by time taken *written with*
+print(grpbyProt.agg({"time_taken":"sum"})
+      .sort_values(by= "time_taken",ascending=False).index[0:3])
+
+#which protocol had the most unique apps 
 print(grpbyProt.agg({"app": pd.Series.nunique})
       .sort_values(by = "app", ascending=False).index[0:3]) #tcp surprising given how many more udp usages there are
 
-#amount of unhashed flows
+#amount of unhashed flows *Written with*
 print(grpbyProt.agg({"src_content_hash": lambda x: sum(x.isna())})
       .sort_values(by = "src_content_hash", ascending=False).index[0:3]) #tcp had the highest amount of unhashed flows
+
+print(df["protocol"].value_counts())
 
 #Top 3 src_ips with the most unique dest_ips
 print(df.groupby("src_ip").agg({"dest_ip": pd.Series.nunique})
