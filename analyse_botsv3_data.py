@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv("botsv3_stream.csv")
 
+df.dtypes
+df.shape
+df.describe()
+df.columns
+    
 df = df[~df["flow_id"].isnull()] # Filter out flows without IDs (incorrect parsing?)
 
 df["bytes_total"] = df["bytes_in"] + df["bytes_out"]
