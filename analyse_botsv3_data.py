@@ -3,7 +3,8 @@
 #Caleb Gindelberger, Ricky Yoder
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import networkx as nx
+from networkx.drawing.nx_agraph import pygraphviz_layout
 
 df = pd.read_csv("botsv3_stream.csv")
 
@@ -19,28 +20,53 @@ df["bytes_total"] = df["bytes_in"] + df["bytes_out"]
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 df.set_index("timestamp" ,inplace=True)
 
-#Visualizations    
+#Visualizations
+# Graph 1
 plt.title("Length in bytes of ICMP flows")
 plt.hist(df[df["protocol"]=="icmp"]["bytes_total"],bins=30)
 plt.show()
 
+# Graph 2
 plt.title("Length in bytes of TCP flows")
 plt.hist(df[df["protocol"]=="tcp"]["bytes_total"],bins=30, range=(0,256000))
 plt.show()
 
+# Graph 3
 plt.title("Length in bytes of UDP flows")
 plt.hist(df[df["protocol"]=="udp"]["bytes_total"],bins=30, range=(0,2048))
 plt.show()
+
+# Graph 4
 
 plt.title("Percentage of Each Type of Protocol")
 plt.pie(df["protocol"].value_counts(), labels = df["protocol"].value_counts().index,
         autopct='%1.1f%%')
 plt.show()
 
+# Graph 5 
+
 plt.title("Total Bytes Over Time")
 plt.plot(df.index.sort_values(),df["bytes_total"].sort_index().cumsum())
 plt.xticks(rotation=45)
 plt.show()
+
+# Graph 6
+counts = df.groupby(["src_ip","dest_ip"]).size().reset_index(name="counts")
+
+connections = set(tuple(x) for x  in counts[counts["counts"] > 100][["src_ip","dest_ip"]].to_numpy())
+
+all_ips = set(ip for conn in connections for ip in conn)
+
+g = nx.DiGraph()
+
+g.add_nodes_from(all_ips)
+
+for conn in connections:
+    g.add_edge(*conn)
+    
+plt.figure(figsize=(16, 12), dpi=80)
+nx.draw_networkx(g, pos=pygraphviz_layout(g, prog="fdp"))
+
 
 #Queries
 #top 3 Most Active dest_ip (Total flows) *Written With*
@@ -81,3 +107,6 @@ print(df["protocol"].value_counts())
 print(df.groupby("src_ip").agg({"dest_ip": pd.Series.nunique})
       .sort_values(by = "dest_ip", ascending=False).index[0:3])
 
+
+# Correlation between bytes and time taken
+print(df[["time_taken","bytes_in","bytes_out","bytes_total"]].corr())
